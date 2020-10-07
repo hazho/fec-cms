@@ -85,5 +85,5 @@ class AddSecureHeaders(MiddlewareMixin):
             "{0} {1}; ".format(directive, " ".join(value))
             for directive, value in content_security_policy.items()
         )
-        response["cache-control"] = "max-age=600"
+        response["cache-control"] = "max-age=2678400"
         return response
