@@ -11,7 +11,17 @@
     {% include 'partials/google-tag-manager-script.html' %}
 
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}" />
+    <link rel="preload" as="font" href="/static/fonts/gandhiserif-bold.woff2" type="font/woff2" crossorigin>
+    <!-- <link rel="preload" as="font" href="/static/fonts/gandhiserif-bolditalic.woff2" type="font/woff2" crossorigin> -->
+    <link rel="preload" as="font" href="/static/fonts/gandhiserif-italic.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/static/fonts/gandhiserif-regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/static/fonts/karla-bold.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/static/fonts/karla-regular.woff2" type="font/woff2" crossorigin>
+    <!-- <link rel="preload" as="font" href="/static/fonts/fec-currencymono-bold.woff2" type="font/woff2" crossorigin> -->
+    <!-- <link rel="preload" as="font" href="/static/fonts/fec-currencymono-bolditalic.woff2" type="font/woff2" crossorigin> -->
+    <!-- <link rel="preload" as="font" href="/static/fonts/fec-currencymono-italic.woff2" type="font/woff2" crossorigin> -->
+    <link rel="preload" as="font" href="/static/fonts/fec-currencymono-regular.woff2" type="font/woff2" crossorigin>
+    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'elections.css' %}">
     {% endblock %}
   </head>
 
@@ -151,7 +161,7 @@
 
     {# Global javascript #}
     <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script> -->
     <script defer type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
 
 
