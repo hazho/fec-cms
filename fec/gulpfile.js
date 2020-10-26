@@ -8,8 +8,11 @@ const rename = require('gulp-rename');
 const svgmin = require('gulp-svgmin');
 const urlencode = require('gulp-css-urlencode-inline-svgs');
 const sass = require('gulp-sass');
-// minifies css
+// Minifies css
 const cleanCSS = require('gulp-clean-css');
+// Removes unused css
+const critical = require('critical').stream;
+const through = require('through2');
 // Clears contents of directory
 const clean = require('gulp-clean');
 const rev = require('gulp-rev');
@@ -21,29 +24,6 @@ gulp.task('clear-css-dir', function() {
     .src('./dist/fec/static/css', { read: false, allowEmpty: true })
     .pipe(clean());
 });
-
-gulp.task(
-  'build-sass',
-  gulp.series('clear-css-dir', function() {
-    return (
-      gulp
-        .src('./fec/static/scss/*.scss')
-        // compiles sass
-        .pipe(sass().on('error', sass.logError))
-        // minifies css
-        .pipe(cleanCSS())
-        // sourcemaps for local to back-trace source of scss
-        //.pipe(gulpif(!production, sourcemaps.init()))*/
-        //makes manifest sass (static asset revision) and puts in destination
-        .pipe(rev())
-        .pipe(gulp.dest('./dist/fec/static/css'))
-        // writes manifest file into destination
-        .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
-        .pipe(gulp.dest('.'))
-    );
-    //.pipe(gulpif(!production, sourcemaps.write()))
-  })
-);
 
 // The widgets are separate because we want them in a specific place with a predictable naming convention
 gulp.task('clear-widgets-css-dir', function() {
@@ -72,6 +52,36 @@ gulp.task(
     );
     //.pipe(gulpif(!production, sourcemaps.write()))
   })
+);
+
+gulp.task(
+  'build-sass',
+  gulp.series(
+    // Empties the css directory
+    'clear-css-dir',
+    // Builds all of the scss files (except widgets, that don't get the hashed filename
+    function() {
+      return (
+        gulp
+          .src('./fec/static/scss/*.scss')
+          // compiles sass
+          .pipe(sass().on('error', sass.logError))
+          // minifies css
+          .pipe(cleanCSS())
+          // sourcemaps for local to back-trace source of scss
+          //.pipe(gulpif(!production, sourcemaps.init()))*/
+          .pipe(rev())
+          .pipe(gulp.dest('./dist/fec/static/css'))
+          // writes manifest file into destination
+          .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
+          .pipe(gulp.dest('.'))
+      );
+      //.pipe(gulpif(!production, sourcemaps.write()))
+    },
+    // 'critical-home-css',
+    // Builds the widgets scss files
+    'build-widgets-sass'
+  )
 );
 
 // clear icons output folder to clean old icons
@@ -133,4 +143,39 @@ gulp.task('consolidate-icons', function() {
     .pipe(rename({ basename: '_icon-variables' }))
     .pipe(urlencode())
     .pipe(gulp.dest('./fec/static/scss/'));
+});
+
+gulp.task('build-home-critical-css', () => {
+  var homeCssFiles = [];
+  return gulp
+    .src('./dist/fec/static/css/home-*.css', { nodir: true })
+    .pipe(
+      through.obj((chunk, enc, cb) => {
+        // for some reason, creating an array of the string of the path doesn't work (css: [chunk.basename])
+        // but creating the array and pushing the new file path to it seems to work as expected
+        homeCssFiles.push('./dist/fec/static/css/' + chunk.basename);
+        cb(null, chunk);
+      })
+    )
+    .pipe(
+      critical({
+        base: './dist/fec/static/css/',
+        css: homeCssFiles,
+        // inline: true,
+        src: 'http://127.0.0.1:8000/',
+        // src: 'https://fec.gov/',
+        strict: true,
+        target: 'home-critical.css'
+      }).on('error', err => {
+        console.log(err.message);
+      })
+      // .then((css, html, uncritical) => {
+      //   console.log('CRITICAL THEN!');
+      //   console.log('css, html, uncritical:', css, html, uncritical);
+      // })
+      // .error(err => {
+      //   console.log('CRITICAL ERROR');
+      // })
+    );
+  // .pipe(gulp.dest('./'));
 });

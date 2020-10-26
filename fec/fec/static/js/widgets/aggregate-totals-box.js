@@ -684,22 +684,6 @@ function buildElement(callingInstance, scriptElement) {
         </div>
       </div>`;
   theInnerHTML += `</div>`; // Close main-content-wrapper
-  // TODO - This will come back when we activate the <iframe> functionality
-  // let theNow = new Date(); // TODO - Make the timestamp update
-  // let theDateString = theNow.toLocaleDateString('en-US', {
-  //   month: 'long',
-  //   day: '2-digit',
-  //   year: 'numeric'
-  // });
-  // theInnerHTML += `
-  //     <footer>
-  //       <div class="timestamp">Updated as of <time datetime="${theNow}">${theDateString}</time></div>
-  //       <a class="gov-fec-seal" href="https://www.fec.gov" target="_blank">
-  //         <img class="theme-light" src="/static/img/seal.svg" alt="Seal of the Federal Election Commission | United States of America">
-  //         <img class="theme-dark" src="/static/img/seal--inverse.svg" alt="Seal of the Federal Election Commission | United States of America">
-  //       </a>
-  //     </footer>
-  //   `;
   toReturn.innerHTML = theInnerHTML;
 
   let disclaimer = document.createElement('span');

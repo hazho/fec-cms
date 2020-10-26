@@ -13,7 +13,7 @@ const entries = {
   polyfills: './fec/static/js/polyfills.js',
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
-  vendor: ['jquery', 'handlebars'],
+  vendor: ['handlebars'],
   'calc-admin-fines-modal': './fec/static/js/modules/calc-admin-fines-modal.js', // Used inside base.html
   'calc-admin-fines': './fec/static/js/modules/calc-admin-fines.js'
 };
@@ -158,7 +158,7 @@ module.exports = [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
         fileName: 'rev-widgets-manifest-js.json',
-        basePath: '/static/js/'
+        basePath: '/dist/static/js/' // '/static/js/'
       }),
       new webpack.ProvidePlugin({ _: 'lodash', $: 'jquery', jQuery: 'jquery' })
     ],
@@ -194,7 +194,7 @@ module.exports = [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
         fileName: 'rev-legal-manifest-js.json',
-        basePath: '/static/js/'
+        basePath: '/dist/static/js/' // '/static/js/'
       })
     ],
     module: {
@@ -230,7 +230,7 @@ module.exports = [
       new webpack.SourceMapDevToolPlugin(),
       new ManifestPlugin({
         fileName: 'rev-draftail-manifest-js.json',
-        basePath: '/static/js/'
+        basePath: '/dist/static/js/' // '/static/js/'
       })
     ],
     module: {

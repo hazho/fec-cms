@@ -45,6 +45,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "https://www.google-analytics.com",
                 "https://www.googletagmanager.com",
                 "https://www.gstatic.com/recaptcha/",
+                "https://ajax.googleapis.com/ajax/libs/jquery/"
             ],  # do we need unsafe-eval? (Doesn't it only allow 'eval()'?)
             "style-src": [
                 "'self'",
@@ -85,5 +86,5 @@ class AddSecureHeaders(MiddlewareMixin):
             "{0} {1}; ".format(directive, " ".join(value))
             for directive, value in content_security_policy.items()
         )
-        response["cache-control"] = "max-age=2678400"
+        response["cache-control"] = "max-age=40000000"  # 2678400"
         return response

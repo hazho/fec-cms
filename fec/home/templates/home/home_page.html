@@ -28,7 +28,7 @@
         </div>
       {% endif %}
     {% endfor %}
-    <ul class="container">
+    <div class="container">
       <div class="heading--section heading--with-action">
         <h2 class="heading__left">News and announcements</h2>
         <a class="button--cta button--updates heading__right" href="/updates">All news</a>
@@ -40,28 +40,29 @@
         <h2 class="heading__left">Events and deadlines</h2>
         <a class="button--cta heading__right button--calendar" href="/calendar">Full calendar</a>
       </div>
-      <ul class="grid grid--4-wide grid--flex t-sans">
-        <li class="grid__item grid__item--with-button">
+      <div class="grid grid--4-wide grid--flex t-sans">
+        <div class="grid__item grid__item--with-button">
           <div class="t-bold">Next open commission meeting:</div>
           <div class="js-next-commission-meeting"></div>
           <a class="button button--alt button--updates" href="/meetings">All meetings</a>
-        <li class="grid__item grid__item--with-button">
+        </div>
+        <div class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next filing deadline:</div>
           <div class="js-next-filing-deadline"></div>
           <a class="button button--alt button--calendar" href="/calendar/?calendar_category_id=25&calendar_category_id=26&calendar_category_id=27">All filing deadlines</a>
-        </li>
-        <li class="grid__item grid__item--with-button">
+        </div>
+        <div class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next training or conference:</div>
           <div class="js-next-training-or-conference"></div>
           <a class="button button--alt button--calendar" href="/calendar/?calendar_category_id=33&calendar_category_id=34">All outreach</a>
-        </li>
-        <li class="grid__item grid__item--with-button">
+        </div>
+        <div class="grid__item grid__item--with-button">
           <div class="t-sans t-bold">Next public comment deadline:</div>
           <div class="js-next-public-comment-deadline"></div>
           <a class="button button--alt button--calendar" href="/calendar/?calendar_category_id=23">All legal events</a>
-        </li>
-      </ul>
-    </ul>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="slab slab--home slab--neutral">
@@ -108,11 +109,50 @@
     pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
     document.head.appendChild(pfScriptElem);
   }
+
 </script>
-<script src="{% asset_for_js 'home.js' %}"></script>
-<!-- <script src="{% asset_for_js 'bythenumbers.js' %}"></script>
-<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
-<script src="{% asset_for_js 'election-lookup.js' %}"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script defer src="{% asset_for_js 'home.js' %}" type="text/javascript" charset="utf-8"></script>
+<script defer async src="{% asset_for_js 'bythenumbers.js' %}" type="text/javascript" charset="utf-8"></script>
+
+<script defer>
+  // var byTheNumbersScriptElem = document.createElement('script');
+  // byTheNumbersScriptElem.async = true;
+  // byTheNumbersScriptElem.defer = true;
+  // byTheNumbersScriptElem.src = "{% asset_for_js 'bythenumbers.js' %}";
+  // document.body.appendChild(byTheNumbersScriptElem);
+
+  var lazyLoadImages = document.querySelectorAll('img.lazyload');
+  for (var i=0; i < lazyLoadImages.length; i++) {
+    var elem = lazyLoadImages[i];
+    elem.setAttribute('src', elem.getAttribute('data-src'));
+  }
+
+  // var lazyLoadScripts = document.querySelectorAll('script[data-src]');
+  // for (var i=0; i < lazyLoadScripts.length; i++) {
+  //   console.log('for()');
+  //   var elem = lazyLoadScripts[i];
+  //   var newElem = document.createElement('script');
+  //   for (var j = 0; j < elem.attributes.length; j++) {
+  //     var thisAttr = elem.attributes[j];
+  //     // console.log('  elem.attributes: ', elem.attributes);
+  //     // console.log('  elem.attributes[',j,']: ', elem.attributes[j]);
+  //     newElem.setAttribute(thisAttr.name, thisAttr.value);
+  //   }
+  //   newElem.setAttribute('src', elem.getAttribute('data-src'));
+  //   console.log('parentelem: ', elem.parentElement);
+  //   console.log('newElem: ', newElem);
+  //   elem.parentElement.appendChild(newElem);
+    // elem.setAttribute('src', elem.getAttribute('data-src'));
+  // }
+</script>
+
+<!-- <script defer async src="{% asset_for_js 'home.js' %}"></script> -->
+<!-- <script defer async src="{% asset_for_js 'bythenumbers.js' %}"></script> -->
+
+<!-- <script src="{% asset_for_js 'dataviz-common.js' %}"></script> -->
+<!-- <script src="{% asset_for_js 'election-lookup.js' %}"></script> -->
 <script>
   //remove competing/confusing querystrings on homepage
   $(function(){

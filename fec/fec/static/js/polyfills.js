@@ -5,7 +5,9 @@ import 'babel-polyfill';
  * used in calendars
  * filter-panel, top-entities,
  */
-import 'core-js/library/fn/object/assign';
+// import 'core-js/library/fn/object/assign';
+// import 'core-js/stable/object/assign';
+import 'core-js/es/object/assign';
 
 /**
  * NodeList.forEach
