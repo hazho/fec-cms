@@ -8,6 +8,7 @@ var columns = require('../modules/columns');
 var committeesTemplate = require('../templates/committees.hbs');
 
 $(document).ready(function() {
+  console.log('COMMITTEES - document ready');
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,

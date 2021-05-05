@@ -15,7 +15,11 @@ var ElectionFilter = require('./election-filter').ElectionFilter;
 var ToggleFilter = require('./toggle-filter').ToggleFilter;
 var RangeFilter = require('./range-filter').RangeFilter;
 
+/**
+ * @param {jQuery.fn} elm
+ */
 function FilterSet(elm) {
+  console.log('FilterSet(elm): ', elm);
   this.$body = $(elm);
   $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
 
@@ -42,13 +46,26 @@ var filterMap = {
   range: RangeFilter
 };
 
-FilterSet.prototype.buildFilter = function($elm) {
+/**
+ * 
+ * @param {*} $elm 
+ * @returns {(CheckboxFilter|DateFilter|ElectionFilter|MultiFilter|RangeFilter|SelectFilter|TextFilter|
+ *     ToggleFilter|TypeaheadFilter)}
+ */
+ FilterSet.prototype.buildFilter = function($elm) {
+  console.log('filter-set buildFilter($elm): ', $elm);
   var filterType = $elm.attr('data-filter');
   var F = filterMap[filterType].constructor;
   return new F($elm);
 };
 
+/**
+ * 
+ * @param {jQuery.fn} $selector
+ * @returns 
+ */
 FilterSet.prototype.activate = function($selector) {
+  console.log('filter-set activate($selector): ', $selector);
   var self = this;
   var query = helpers.sanitizeQueryParams(
     URI.parseQuery(window.location.search)
@@ -76,6 +93,7 @@ FilterSet.prototype.activate = function($selector) {
 };
 
 FilterSet.prototype.activateProcessed = function() {
+  console.log('filter-set activateProcessed()');
   if (_.isEmpty(this.processedFilters)) {
     var $filters = this.$body.find('.js-processed-filters .js-filter');
     this.processedFilters = this.activate($filters);
@@ -94,24 +112,30 @@ FilterSet.prototype.activateEfiling = function() {
 };
 
 FilterSet.prototype.activateDataType = function() {
+  console.log('filter-set activateDataType()');
   var $filter = this.$body.find('#data-type-toggle .js-filter');
   this.activate($filter);
 };
 
 FilterSet.prototype.activateAll = function() {
+  console.log('filter-set activateAll()');
   // If the panel uses efiling filters, activate the data type filter
   // and activate the others when necessary
   if (this.efiling) {
     this.activateDataType();
   } else {
     this.filters = this.activate(this.$body.find('.js-filter'));
+    console.log('    this.filters (return of this.activate): ', this.filters);
   }
   return this;
 };
 
 FilterSet.prototype.serialize = function() {
-  return _.reduce(
-    this.$body.find('input,select').serializeArray(),
+  console.log('filter-set.serialize()');
+  var seralizedArray = this.$body.find('input,select').serializeArray();
+  console.log('    seralizedArray: ', seralizedArray);
+  var toReturn = _.reduce(
+    seralizedArray,
     function(memo, val) {
       if (val.value && val.name.slice(0, 1) !== '_') {
         if (memo[val.name]) {
@@ -124,6 +148,8 @@ FilterSet.prototype.serialize = function() {
     },
     {}
   );
+  console.log('    toReturn: ', toReturn);
+  return toReturn;
 };
 
 FilterSet.prototype.clear = function() {
@@ -132,7 +158,14 @@ FilterSet.prototype.clear = function() {
   });
 };
 
+/**
+ * 
+ * @param {jQuery.event} e
+ * @param {Object}  opts
+ * @param {*}       opts.key
+ */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
+  console.log('filter-set handleTagRemoved(e, opts): ', e, opts);
   var $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {
     var type = $input.get(0).type;
@@ -145,11 +178,23 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
   }
 };
 
+/**
+ * 
+ * @param {*} e 
+ * @param {Object}  opts
+ * @param {Boolean} opts.isValid
+ */
 FilterSet.prototype.handleValidation = function(e, opts) {
+  console.log('filter-set handleValidation(e, opts): ', e, opts);
   this.isValid = opts.isValid;
 };
 
+/**
+ * 
+ * @param {String} dataType
+ */
 FilterSet.prototype.switchFilters = function(dataType) {
+  console.log('filter-set switchFilters(dataType): ', dataType);
   // Identify which filter group to show and which to hide
   var currentFilters = '.js-' + dataType + '-filters';
   var otherFilters =
@@ -169,7 +214,12 @@ FilterSet.prototype.switchFilters = function(dataType) {
   this.activateSwitchedFilters(dataType);
 };
 
+/**
+ * 
+ * @param {*} dataType 
+ */
 FilterSet.prototype.activateSwitchedFilters = function(dataType) {
+  console.log('filter-set activateSwitchedFilters(dataType): ', dataType);
   // Save the current query for later
   var query = helpers.sanitizeQueryParams(
     URI.parseQuery(window.location.search)

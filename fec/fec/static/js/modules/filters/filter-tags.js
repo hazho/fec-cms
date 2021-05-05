@@ -37,12 +37,13 @@ var NONREMOVABLE_TAG_TEMPLATE = _.template(
 
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
- * @param {*} opts
- * @param {*} opts.resultType
- * @param {*} opts.showResultCount
- * @param {*} opts.tableTitle
+ * @param {Object}  opts
+ * @param {String}  opts.resultType ('results' or 'events')
+ * @param {Boolean} opts.showResultCount
+ * @param {String}  opts.tableTitle
  */
 function TagList(opts) {
+  console.log('TagList(opts): ', opts);
   this.opts = opts;
 
   // Resetting filters will re-apply two-year limitations, like when users first land on the page.
@@ -87,15 +88,19 @@ function TagList(opts) {
 }
 
 /**
- * Called document.body hears filter:added
- * @param {} e
- * @param {} opts
- * @param {} opts.key
- * @param {} opts.name
- * @param {} opts.range
- * @param {} opts.rangeName
+ * Called when document.body hears filter:added
+ * @param {jQuery.Event} e
+ * @param {Object}  opts
+ * @param {}        opts.filterLabel
+ * @param {String}  opts.key
+ * @param {String}  opts.name
+ * @param {Boolean} opts.loadedOnce
+ * @param {}        opts.range
+ * @param {}        opts.rangeName
+ * @param {}        opts.value
  */
 TagList.prototype.addTag = function(e, opts) {
+  console.log('addTag(e, opts): ', e, opts);
   var tag = opts.nonremovable
     ? NONREMOVABLE_TAG_TEMPLATE(opts)
     : TAG_TEMPLATE(opts);
@@ -133,10 +138,11 @@ TagList.prototype.addTag = function(e, opts) {
  * Called from within @see TagList.prototype.addTag
  * @param {} $tagCategory
  * @param {} tag
- * @param {} opts
- * @param {} opts.range
+ * @param {Object}  opts
+ * @param {}        opts.range
  */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
+  console.log('addTagItem($tagCategory, tag, opts): ', $tagCategory, tag, opts);
   var rangeClass = 'tag__category__range--' + opts.rangeName;
 
   if (opts.range == 'min') {
@@ -154,6 +160,7 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
  * @param {} emit
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
+  console.log('removeTagElement($tag, emit): ', $tag, emit);
   // This handles the actual removal of the DOM elementrs
   var $tagCategory = $tag.parent();
   var key = $tag.data('id');
@@ -174,10 +181,11 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * Called from @see TagList.prototype.removeTagEvt
  * Called from @see TagList.prototype.addTag
  * @param {} key
- * @param {} emit
+ * @param {Boolean} emit
  * @param {} forceRemove
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
+  console.log('removeTag(key, emit, forceRemove): ', key, emit, forceRemove);
   var $tag = this.$list.find('[data-id="' + key + '"]');
   if ($tag.length > 0) {
     // If the tag exists, remove the element if it's removable
@@ -207,11 +215,12 @@ TagList.prototype.removeTag = function(key, emit, forceRemove) {
  * Handler for this.$clear click
  * Handler for document.body tag:removeAll
  * @param {} e
- * @param {} opts
- * @param {} opts.forceRemove
- * @param {} emit
+ * @param {Object}  opts
+ * @param {}        opts.forceRemove
+ * @param {}        emit
  */
 TagList.prototype.removeAllTags = function(e, opts, emit) {
+  console.log('removeAllTags(e, opts, emit): ', e, opts, emit);
   // If the element has the reset class, we revert to the original page state by re-navigating.
   // Do not trigger tag removal for filter reset on load
   if (
@@ -252,12 +261,16 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
 
 /**
  * The handler when document.body hears filter:removed
- * @param {} e
- * @param {} opts
- * @param {} opts.key
- * @param {} opts.name
+ * @param {jQuery.Event} e
+ * @param {Object}  opts
+ * @param {}        opts.filterLabel
+ * @param {String}  opts.key
+ * @param {Boolean} opts.loadedOnce
+ * @param {String}  opts.name
+ * @param {String}  opts.value
  */
 TagList.prototype.removeTagEvt = function(e, opts) {
+  // console.log('removeTagEvt(e, opts): ', e, opts);
   this.removeTag(opts.key, false);
   // logic to handle adding an all years tag if
   // no two year transaction period filter is provided
@@ -290,6 +303,7 @@ TagList.prototype.removeTagEvt = function(e, opts) {
  * @param {} e
  */
 TagList.prototype.removeTagDom = function(e) {
+  console.log('removeTagDom()');
   var key = $(e.target)
     .closest('.tag__item')
     .data('id');
@@ -299,11 +313,12 @@ TagList.prototype.removeTagDom = function(e) {
 /**
  * Handles document.body filter:renamed
  * @param {} e
- * @param {} opts
- * @param {} opts.key
- * @param {} opts.nonremovable
+ * @param {Object}  opts
+ * @param {}        opts.key
+ * @param {}        opts.nonremovable
  */
 TagList.prototype.renameTag = function(e, opts) {
+  console.log('renameTag(e, opts): ', e, opts);
   var tag = opts.nonremovable
     ? NONREMOVABLE_TAG_TEMPLATE(opts)
     : TAG_TEMPLATE(opts);
@@ -316,10 +331,11 @@ TagList.prototype.renameTag = function(e, opts) {
 /**
  * Handler for document.body filter:disabled
  * @param {} e
- * @param {} opts
- * @param {} opts.key
+ * @param {Object}        opts
+ * @param {String}  opts.key
  */
 TagList.prototype.disableTag = function(e, opts) {
+  console.log('disableTag(e, opts): ', e, opts);
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').hide();
 };
@@ -327,10 +343,11 @@ TagList.prototype.disableTag = function(e, opts) {
 /**
  * Handler for document.body filter:enabled
  * @param {} e
- * @param {} opts
- * @param {} opts.key
+ * @param {Object}  opts
+ * @param {}        opts.key
  */
 TagList.prototype.enableTag = function(e, opts) {
+  console.log('enableTag(e, opts): ', e, opts);
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').show();
 };

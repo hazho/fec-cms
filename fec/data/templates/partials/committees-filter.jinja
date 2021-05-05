@@ -8,6 +8,7 @@
 {% import 'macros/filters/date.jinja' as date %}
 
 {% block filters %}
+<h1>COMMITTEES FILTER</h1>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
   <div class="filters__inner">
     {{ typeahead.field('q', 'Committee name or ID', False, dataset='committees', allow_text=True) }}

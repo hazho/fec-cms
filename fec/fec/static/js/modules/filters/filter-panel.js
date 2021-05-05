@@ -83,6 +83,13 @@ FilterPanel.prototype.toggle = function() {
   }
 };
 
+/**
+ * Increments the number of active filters in an accordion/filter panel group
+ * @param {jQuery.event} e
+ * @param {Object}  opts
+ * @param {Boolean} opts.ignoreCount
+ * @returns nothing if opts.ignoreCount is truthy
+ */
 FilterPanel.prototype.handleAddEvent = function(e, opts) {
   // If it's a data-type toggle, we tell it to ignore for the count of active filters
   if (opts.ignoreCount) {
@@ -98,6 +105,13 @@ FilterPanel.prototype.handleAddEvent = function(e, opts) {
   }
 };
 
+/**
+ * Decrements the number of active filters in an accordion/filter panel group
+ * @param {jQuery.event} e
+ * @param {Object}  opts
+ * @param {Boolean} opts.loadedOnce
+ * @returns nothing if opts.loadedOnce is not true
+ */
 FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
   if (opts.loadedOnce !== true) {
     return;

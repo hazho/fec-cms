@@ -37,6 +37,7 @@ validListUrlParamValues = ["P", "S", "H"]
 
 
 def to_date(committee, cycle):
+    print('DEBUGGING - to_date view')
     if committee["committee_type"] in ["H", "S", "P"]:
         return None
     return min(datetime.now().year, int(cycle))
@@ -285,10 +286,10 @@ def get_candidate(candidate_id, cycle, election_full):
     # This will be the first item returned in the committees list
     # If there are no committees, return the normal no results message
     if len(committees) > 0:
-        if committees[0].get('former_candidate_id'):
-            current_committee_name = committees[0].get('name')
-            converted_committee_id = committees[0].get('committee_id')
-            former_committee_name = committees[0].get('former_committee_name')
+        if committees[0].get("former_candidate_id"):
+            current_committee_name = committees[0].get("name")
+            converted_committee_id = committees[0].get("committee_id")
+            former_committee_name = committees[0].get("former_committee_name")
 
     return {
         "converted_committee_name": current_committee_name,
@@ -543,10 +544,10 @@ def get_committee(committee_id, cycle):
 
     # Add message for a committee that was formerly an authorized candidate committee.
     # These committees are now unauthorized committees.
-    if committee['former_candidate_id']:
-        template_variables["former_committee_name"] = committee['former_committee_name']
-        template_variables["former_authorized_candidate_name"] = committee['former_candidate_name']
-        template_variables["former_authorized_candidate_id"] = committee['former_candidate_id']
+    if committee["former_candidate_id"]:
+        template_variables["former_committee_name"] = committee["former_committee_name"]
+        template_variables["former_authorized_candidate_name"] = committee["former_candidate_name"]
+        template_variables["former_authorized_candidate_id"] = committee["former_candidate_id"]
 
     return template_variables
 

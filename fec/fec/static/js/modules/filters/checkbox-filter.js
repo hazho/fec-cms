@@ -4,7 +4,12 @@ var $ = require('jquery');
 
 var Filter = require('./filter-base.js').Filter;
 
+/**
+ * 
+ * @param {*} elm 
+ */
 function CheckboxFilter(elm) {
+  console.log('CheckboxFilter(elm): ', elm);
   Filter.call(this, elm);
   this.removable = this.$elm.data('removable') || false;
 
@@ -19,7 +24,12 @@ function CheckboxFilter(elm) {
 CheckboxFilter.prototype = Object.create(Filter.prototype);
 CheckboxFilter.constructor = CheckboxFilter;
 
+/**
+ * 
+ * @param {jQuery.event} e
+ */
 CheckboxFilter.prototype.handleChange = function(e) {
+  console.log('checkbox-filter handleChange(e): ', e);
   var $input = $(e.target);
   var id = $input.attr('id');
   var loadedOnce, eventName;
@@ -53,6 +63,7 @@ CheckboxFilter.prototype.handleChange = function(e) {
 };
 
 CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
+  console.log('CheckboxFilter.removeCheckbox(e, opts): ', e, opts);
   var $input = $(e.target);
 
   // tag removal
@@ -65,6 +76,7 @@ CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
 
 // "Clear all filters" will remove unchecked checkboxes
 CheckboxFilter.prototype.handleClearFilters = function() {
+  console.log('CheckboxFilter.handleClearFilters()');
   var self = this;
   this.$elm.find('input:checkbox:not(:checked)').each(function() {
     self.removeCheckbox({ target: this });
